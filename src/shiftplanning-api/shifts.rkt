@@ -1,7 +1,8 @@
 #lang racket/base
 
 (require "api-call.rkt"
-         "teams.rkt")
+         "teams.rkt"
+         "team-members.rkt")
 
 (provide get/shifts)
 (define (get/shifts)
@@ -14,10 +15,10 @@
 
 (define (get/on-now/team [team-name team/row])
   (filter (lambda (employee)
-            (employee-in-team?/on-now employee
-                                      team-name))
-          (get-on-now)))
+            (employee-in-team? employee
+                               team-name))
+          (get/on-now)))
 
 (module+ main
   (require racket/pretty)
-  (pretty-print (get/on-now/team team/english)))
+  (pretty-print (get/on-now/team team/italian)))
