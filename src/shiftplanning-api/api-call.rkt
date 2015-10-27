@@ -11,7 +11,7 @@
 (provide api-call)
 (define (api-call #:module module
                   #:method method
-                  [request-parameters #hash()]
+                  #:request-parameters [request-parameters #hash()]
                   #:token [token credentials/token])
   (define request-data
     (jsexpr->string
