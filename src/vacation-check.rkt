@@ -43,7 +43,9 @@
   (define new (new-vacations))
   (for-each add-seen-vacation new)
   (for-each (lambda (v)
-              (slack-message (format "~a has requested a vacation!")))
+              (slack-message (format "~a has requested a vacation!"
+                                     (hash-ref v
+                                               'employee_name))))
             new)
   (write-seen-vacations (seen-vacations)))
 
