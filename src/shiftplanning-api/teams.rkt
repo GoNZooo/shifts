@@ -10,10 +10,6 @@
 
 (provide employee-in-team?/schedule)
 (define (employee-in-team?/schedule employee team)
-  (define (schedule-in-team? schedule)
-    (findf (lambda (team-schedule)
-             (equal? schedule team-schedule))
-           team))
-
-  (ormap schedule-in-team?
-         (hash-ref employee 'schedules)))
+  (for/or ([t team])
+    (hash-has-key? (hash-ref employee 'schedules)
+                   (car t))))

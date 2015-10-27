@@ -11,7 +11,7 @@
 
 (define (get/employees/team [team-name team/row])
   (filter (lambda (employee)
-            (employee-in-team? employee team-name))
+            (employee-in-team?/schedule employee team-name))
           (api-call #:module "staff.employees"
                     #:method "GET")))
 
