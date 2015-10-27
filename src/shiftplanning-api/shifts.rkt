@@ -15,8 +15,8 @@
 
 (define (get/on-now/team [team-name team/row])
   (filter (lambda (employee)
-            (employee-in-team? employee
-                               team-name))
+            (employee-in-team?/id employee
+                                  team-name))
           (get/on-now)))
 
 (module+ main
