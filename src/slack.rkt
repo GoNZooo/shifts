@@ -10,11 +10,16 @@
 
 (provide slack-message)
 (define (slack-message msg
+                       #:attachments [attachments '()]
                        #:host [host hook-host]
                        #:url [url hook-url])
   (define request-data
-    (jsexpr->string
-      `#hash((text . ,msg))))
+    (if (null? attachments)
+      (jsexpr->string
+        `#hash((text . ,msg)))
+      (jsexpr->string
+        `#hash((text . " ")
+               (attachments . ,attachments)))))
 
   (define-values (response headers input-port)
     (http-sendrecv host

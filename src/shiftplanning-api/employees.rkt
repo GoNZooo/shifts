@@ -79,4 +79,4 @@
 
 (module+ main
   (require racket/pretty)
-  (pretty-print (team->employee-ids "cs_italian")))
+  (pretty-print (team->employee-ids "cs_row")))

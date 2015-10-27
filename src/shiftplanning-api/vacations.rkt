@@ -8,7 +8,7 @@
   (api-call #:module "schedule.vacations"
             #:method "GET"
             #:request-parameters
-            #hash((mode . "requested"))))
+            #hash((mode . "manage"))))
 
 (provide get/vacations/team)
 (define (get/vacations/team [team-name "cs_row"])
@@ -20,4 +20,4 @@
 
 (module+ main
   (require racket/pretty)
-  (pretty-print (get/vacations/team)))
+  (pretty-print (get/vacations)))
