@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require "shiftplanning-api/vacations.rkt")
+(require "shiftplanning-api/vacations.rkt"
+         "slack.rkt")
 
 (define seen-vacations (make-parameter '()))
 
@@ -42,7 +43,7 @@
   (define new (new-vacations))
   (for-each add-seen-vacation new)
   (for-each (lambda (v)
-              (slackmessage (format "~a has requested a vacation!")))
+              (slack-message (format "~a has requested a vacation!")))
             new)
   (write-seen-vacations (seen-vacations)))
 

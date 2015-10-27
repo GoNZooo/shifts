@@ -8,7 +8,9 @@
 
          "slack-information.rkt")
 
-(define (slack-message msg #:host [host hook-host]
+(provide slack-message)
+(define (slack-message msg
+                       #:host [host hook-host]
                        #:url [url hook-url])
   (define request-data
     (jsexpr->string
