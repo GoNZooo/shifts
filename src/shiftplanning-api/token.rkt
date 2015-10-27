@@ -8,7 +8,7 @@
          "credentials.rkt"
          "urls.rkt")
 
-(define (get-token [username credentials/username]
+(define (get/token [username credentials/username]
                    [password credentials/password]
                    [api-key credentials/api-key])
   (define request-data
@@ -33,7 +33,7 @@
 
   (read-json input-port))
 
-(define (get-config [api-key credentials/api-key])
+(define (get/config [api-key credentials/api-key])
   (define request-data
     (jsexpr->string
       `#hash((key . ,api-key)
