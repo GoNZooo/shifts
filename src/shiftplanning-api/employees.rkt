@@ -1,7 +1,8 @@
 #lang racket/base
 
 (require "api-call.rkt"
-         "teams.rkt")
+         "teams.rkt"
+         "team-members.rkt")
 
 (provide get/employees)
 (define (get/employees)
@@ -16,4 +17,4 @@
 
 (module+ main
   (require racket/pretty)
-  (pretty-print (get/employees/team)))
+  (pretty-print (get/employees/team team/row)))
