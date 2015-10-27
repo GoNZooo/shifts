@@ -65,7 +65,7 @@
                                              start-date end-date))
                            (short . ,#t))))))))
 
-(define (fetch-loop [sleep-time 600])
+(define (fetch-loop [sleep-time 300])
   (seen-vacations (read-seen-vacations))
   (define new (new-vacations))
   (for-each add-seen-vacation new)
