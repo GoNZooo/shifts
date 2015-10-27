@@ -1,7 +1,5 @@
 #lang racket/base
 
-(require "team-members.rkt")
-
 (provide employee-in-team?/id)
 (define (employee-in-team?/id employee team)
   (ormap (lambda (team-member)
