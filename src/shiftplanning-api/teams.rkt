@@ -9,7 +9,7 @@
          team))
 
 (provide employee-in-team?/schedule)
-(define (employee-in-team?/id employee team)
+(define (employee-in-team?/schedule employee team)
   (define (schedule-in-team? schedule)
     (findf (lambda (team-schedule)
              (equal? schedule team-schedule))
