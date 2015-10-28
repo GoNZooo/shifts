@@ -53,8 +53,7 @@
     #:attachments
     `(#hash((fallback . ,(format "~a has requested vacation (~a to ~a)"
                                  employee-name start-date end-date))
-            (title . ,(format "Vacation request [~a]"
-                              employee-name))
+            (title . "Vacation request")
             (fields .
                     (#hash((title . "Employee")
                            (value . ,employee-name)
