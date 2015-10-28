@@ -54,16 +54,17 @@
     #:attachments
     `(#hash((fallback . ,(format "~a has requested vacation (~a to ~a)"
                                  employee-name start-date end-date))
-            (title . ,(format "Vacation request (~a)"
+            (title . ,(format "Vacation request [~a]"
                               employee-name))
             (fields .
                     (#hash((title . "Employee")
                            (value . ,employee-name)
                            (short . ,#t))
                      #hash((title . "Timeframe")
-                           (value . ,(format "~a to ~a"
+                           (value . ,(format "*~a* to *~a*"
                                              start-date end-date))
-                           (short . ,#t))))))))
+                           (short . ,#t))))
+            (mrkdwn_in . ("fields"))))))
 
 (define (fetch-loop [sleep-time 300])
   (seen-vacations (read-seen-vacations))
