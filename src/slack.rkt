@@ -18,7 +18,7 @@
       (jsexpr->string
         `#hash((text . ,msg)))
       (jsexpr->string
-        `#hash((text . " ")
+        `#hash((text . ,msg)
                (attachments . ,attachments)))))
 
   (define-values (response headers input-port)
