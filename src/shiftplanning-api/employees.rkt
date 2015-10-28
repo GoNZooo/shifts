@@ -78,5 +78,7 @@
                       'name))))
 
 (module+ main
-  (require racket/pretty)
+  (require racket/pretty
+           racket/string)
+
   (pretty-print (team->employee-ids "cs_row")))
