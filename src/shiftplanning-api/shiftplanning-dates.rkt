@@ -21,7 +21,7 @@
 (provide date->shiftplanning-date)
 (define (date->shiftplanning-date d)
   (format "~a ~a, ~a"
-          (date-month d)
+          (number->month (date-month d))
           (date-day d)
           (date-year d)))
 
