@@ -40,10 +40,10 @@
 (define (vacation-notify v)
   (define start-date (hash-ref (hash-ref v
                                          'start_day)
-                               'date))
+                               'formatted))
   (define end-date (hash-ref (hash-ref v
                                        'end_day)
-                             'date))
+                             'focmatted))
 
   (define employee-name (hash-ref v
                                   'employee_name))
