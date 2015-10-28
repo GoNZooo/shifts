@@ -1,7 +1,6 @@
 #lang racket/base
 
 (require "api-call.rkt"
-         "teams.rkt"
          "team-members.rkt"
          "shiftplanning-dates.rkt")
 
