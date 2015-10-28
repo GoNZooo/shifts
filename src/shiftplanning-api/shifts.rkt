@@ -15,13 +15,15 @@
               #:method "GET"
               #:request-parameters
               `#hash((start_date . ,start-date)
-                     (end_date . ,end-date)))
+                     (end_date . ,end-date)
+                     (type . "schedule")))
     (api-call #:module "reports.schedule"
               #:method "GET"
               #:request-parameters
               `#hash((start_date . ,start-date)
                      (end_date . ,end-date)
-                     (employees . ,employees)))))
+                     (employees . ,employees)
+                     (type . "schedule")))))
 
 (define (get/on-now)
   (api-call #:module "dashboard.onnow"
