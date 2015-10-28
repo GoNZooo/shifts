@@ -2,12 +2,25 @@
 
 (require "api-call.rkt"
          "teams.rkt"
-         "team-members.rkt")
+         "team-members.rkt"
+         "shiftplanning-dates.rkt")
 
-(provide get/shifts)
-(define (get/shifts)
-  (api-call #:module "schedule.shifts"
-            #:method "GET"))
+(provide get/report/shifts)
+(define (get/report/shifts #:start start-date
+                           #:end end-date
+                           #:employees [employees '()])
+  (if (null? employees)
+    (api-call #:module "reports.schedule"
+              #:method "GET"
+              #:request-parameters
+              `#hash((start_date . ,start-date)
+                     (end_date . ,end-date)))
+    (api-call #:module "reports.schedule"
+              #:method "GET"
+              #:request-parameters
+              `#hash((start_date . ,start-date)
+                     (end_date . ,end-date)
+                     (employees . ,employees)))))
 
 (define (get/on-now)
   (api-call #:module "dashboard.onnow"
