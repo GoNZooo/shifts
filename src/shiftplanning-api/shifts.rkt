@@ -26,12 +26,17 @@
   (api-call #:module "dashboard.onnow"
             #:method "GET"))
 
-(define (get/on-now/team [team-name team/row])
+(define (get/on-now/team [team-name "cs_row"])
   (filter (lambda (employee)
-            (employee-in-team?/id employee
-                                  team-name))
+            (employee-in-team? employee
+                               team-name))
           (get/on-now)))
 
 (module+ main
   (require racket/pretty)
-  (pretty-print (get/on-now/team team/italian)))
+  (define cd (current-date))
+  (define start-of-month (date 0 0 0 1 (date-month cd) (date-year cd) 0 0 0 #f))
+  (define end-of-month (date 0 0 0 31 (date-month cd) (date-year cd) 0 0 0 #f))
+  (pretty-print
+    (get/report/shifts #:start (date->shiftplanning-date start-of-month)
+                       #:end (date->shiftplanning-date end-of-month))))
