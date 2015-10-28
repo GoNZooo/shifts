@@ -57,11 +57,11 @@
             (fields .
                     (#hash((title . "Employee")
                            (value . ,employee-name)
-                           (short . ,#t))
+                           (short . ,#f))
                      #hash((title . "Timeframe")
                            (value . ,(format "*~a* to *~a*"
                                              start-date end-date))
-                           (short . ,#t))))
+                           (short . ,#f))))
             (mrkdwn_in . ("fields"))))))
 
 (define (fetch-loop [sleep-time 300])
