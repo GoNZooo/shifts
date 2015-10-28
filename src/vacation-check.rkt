@@ -64,7 +64,7 @@
                            (short . ,#f))))
             (mrkdwn_in . ("fields"))))))
 
-(define (fetch-loop [sleep-time 300])
+(define (fetch-loop [sleep-time 540])
   (seen-vacations (read-seen-vacations))
   (with-handlers ([exn:fail:read?
                     (lambda (e)
