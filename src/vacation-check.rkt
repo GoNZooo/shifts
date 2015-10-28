@@ -61,7 +61,7 @@
                            (value . ,employee-name)
                            (short . ,#t))
                      #hash((title . "Timeframe")
-                           (value . ,(format "From ~a to ~a"
+                           (value . ,(format "~a to ~a"
                                              start-date end-date))
                            (short . ,#t))))))))
 
