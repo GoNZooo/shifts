@@ -1,5 +1,7 @@
 #lang racket/base
 
+(require racket/date)
+
 (provide date->shiftplanning-date)
 (define (date->shiftplanning-date d)
   (format "~a ~a, ~a"
