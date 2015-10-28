@@ -43,7 +43,7 @@
                                'formatted))
   (define end-date (hash-ref (hash-ref v
                                        'end_day)
-                             'focmatted))
+                             'formatted))
 
   (define employee-name (hash-ref v
                                   'employee_name))
