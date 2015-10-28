@@ -49,7 +49,7 @@
                                   'employee_name))
   
   (slack-message
-    (format "Mагичка, ~a has requested a vacation! (~a to ~a)"
+    (format "@mag4e: ~a has requested a vacation!"
             employee-name start-date end-date)
     #:attachments
     `(#hash((fallback . ,(format "~a has requested vacation (~a to ~a)"

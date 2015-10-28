@@ -16,9 +16,11 @@
   (define request-data
     (if (null? attachments)
       (jsexpr->string
-        `#hash((text . ,msg)))
+        `#hash((text . ,msg)
+               (parse . "full")))
       (jsexpr->string
         `#hash((text . ,msg)
+               (parse . "full")
                (attachments . ,attachments)))))
 
   (define-values (response headers input-port)
