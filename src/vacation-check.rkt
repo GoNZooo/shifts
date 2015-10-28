@@ -67,12 +67,16 @@
 
 (define (fetch-loop [sleep-time 300])
   (seen-vacations (read-seen-vacations))
-  (define new (new-vacations))
-  (for-each add-seen-vacation new)
-  (for-each (lambda (v)
-              (vacation-notify v))
-            new)
-  (write-seen-vacations (seen-vacations))
+  (with-handlers ([exn:fail:read?
+                    (lambda (e)
+                      (printf "Read error: ~a~n"
+                              e))])
+                 (define new (new-vacations))
+                 (for-each add-seen-vacation new)
+                 (for-each (lambda (v)
+                             (vacation-notify v))
+                           new)
+                 (write-seen-vacations (seen-vacations)))
   (sleep sleep-time)
   (fetch-loop))
 
