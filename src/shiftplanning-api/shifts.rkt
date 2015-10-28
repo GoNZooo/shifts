@@ -36,8 +36,8 @@
 (module+ main
   (require racket/pretty)
   (define cd (current-date))
-  (define start-of-month (date 0 0 0 1 (date-month cd) (date-year cd) 0 0 0 #f))
-  (define end-of-month (date 0 0 0 31 (date-month cd) (date-year cd) 0 0 0 #f))
+  (define start-of-month (date 0 0 0 1 (date-month cd) (date-year cd) 0 0 #f 0))
+  (define end-of-month (date 0 0 0 31 (date-month cd) (date-year cd) 0 0 #f 0))
   (pretty-print
     (get/report/shifts #:start (date->shiftplanning-date start-of-month)
                        #:end (date->shiftplanning-date end-of-month))))
