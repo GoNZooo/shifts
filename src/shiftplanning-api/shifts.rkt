@@ -2,7 +2,7 @@
 
 (require racket/date
          racket/string
-         
+
          "api-call.rkt"
          "employees.rkt"
          "shiftplanning-dates.rkt")
@@ -68,11 +68,11 @@
   (hash-ref snapshot (shift-id shift) #f))
 
 
-(provide shifts/snapshot/changed)
-(define (shifts/snapshot/changed snapshot shifts
-                                 [new-shifts '()]
-                                 [edited-shifts '()]
-                                 [unchanged-shifts '()])
+(provide shifts/snapshot/diff)
+(define (shifts/snapshot/diff snapshot shifts
+                              [new-shifts '()]
+                              [edited-shifts '()]
+                              [unchanged-shifts '()])
   (define (shifts/snapshot/new?)
     (not (hash-has-key? snapshot (shift-id (car shifts)))))
 
@@ -104,27 +104,27 @@
             (edited . ,edited-shifts)
             (unchanged . ,unchanged-shifts))]
     [(shifts/snapshot/new?)
-     (shifts/snapshot/changed snapshot
-                              (cdr shifts)
-                              (cons (car shifts)
-                                    new-shifts)
-                              edited-shifts
-                              unchanged-shifts)]
+     (shifts/snapshot/diff snapshot
+                           (cdr shifts)
+                           (cons (car shifts)
+                                 new-shifts)
+                           edited-shifts
+                           unchanged-shifts)]
     [(shifts/snapshot/edited?)
-     (shifts/snapshot/changed snapshot
-                              (cdr shifts)
-                              new-shifts
-                              (add-edited-shift (car shifts)
-                                                (shift-id (car shifts))
-                                                edited-shifts)
-                              unchanged-shifts)]
+     (shifts/snapshot/diff snapshot
+                           (cdr shifts)
+                           new-shifts
+                           (add-edited-shift (car shifts)
+                                             (shift-id (car shifts))
+                                             edited-shifts)
+                           unchanged-shifts)]
     [else
-      (shifts/snapshot/changed snapshot
-                               (cdr shifts)
-                               new-shifts
-                               edited-shifts
-                               (cons (shift-id (car shifts))
-                                     unchanged-shifts))]))
+      (shifts/snapshot/diff snapshot
+                            (cdr shifts)
+                            new-shifts
+                            edited-shifts
+                            (cons (shift-id (car shifts))
+                                  unchanged-shifts))]))
 
 (define (shift-employees shift)
   (if (hash-has-key? shift 'employees)
@@ -198,5 +198,5 @@
   ; (define snapshot (shifts/snapshot/team "cs_row"))
   ; (write-snapshot snapshot "cs_row2"))
   (pretty-print
-    (shifts/snapshot/changed snapshot
-                             (get/schedule/shifts/team "cs_row"))))
+    (shifts/snapshot/diff snapshot
+                          (get/schedule/shifts/team "cs_row"))))
