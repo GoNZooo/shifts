@@ -61,6 +61,32 @@
                                 team-name)
                         read))
 
+(define (modify-snapshot snapshot diff)
+  (define new-snapshot (make-hash))
+
+  (for-each (lambda (edited)
+              (hash-set! new-snapshot
+                         (car edited)
+                         (cdr edited)))
+            (hash-ref diff
+                      'edited))
+
+  (for-each (lambda (deleted)
+              (hash-remove! new-snapshot
+                            deleted))
+            (hash-ref diff
+                      'deleted))
+
+  (for-each (lambda (new)
+              (hash-set! new-snapshot
+                         (hash-ref new
+                                   'id)
+                         'new))
+            (hash-ref diff
+                      'new))
+
+  new-snapshot)
+
 (define (shift-id shift)
   (hash-ref shift 'id))
 
