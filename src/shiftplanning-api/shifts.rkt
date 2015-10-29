@@ -83,9 +83,8 @@
                  (hash-ref (car shifts)
                            'edited))))
 
-  (define (add-shift shift shift-list)
-    (cons (cons (shift-in-snapshot shift
-                                   snapshot)
+  (define (add-edited-shift shift snapshot-id shift-list)
+    (cons (cons snapshot-id
                 shift)
           shift-list))
 
@@ -93,38 +92,38 @@
     [(null? shifts)
      `#hash((new . ,new-shifts)
             (deleted .
-                     ,(map (lambda (sid)
-                             (hash-ref snapshot
-                                       sid))
-                           (filter (lambda (snapshot-id)
-                                     (not (findf (lambda (shift)
-                                                   (equal? (shift-id shift)
-                                                           snapshot-id))
-                                                 (append (map cdr edited-shifts)
-                                                         unchanged-shifts))))
-                                   (hash-keys snapshot)))))
+                     ,(filter (lambda (snapshot-id)
+                                (not (findf (lambda (shift)
+                                              (equal? shift
+                                                      snapshot-id))
+                                            (append (map shift-id
+                                                         (map cdr
+                                                              edited-shifts))
+                                                    unchanged-shifts))))
+                              (hash-keys snapshot)))
             (edited . ,edited-shifts)
             (unchanged . ,unchanged-shifts))]
     [(shifts/snapshot/new?)
      (shifts/snapshot/changed snapshot
                               (cdr shifts)
-                              (add-shift (car shifts)
-                                                 new-shifts)
+                              (cons (car shifts)
+                                    new-shifts)
                               edited-shifts
                               unchanged-shifts)]
     [(shifts/snapshot/edited?)
      (shifts/snapshot/changed snapshot
                               (cdr shifts)
                               new-shifts
-                              (add-shift (car shifts)
-                                                 edited-shifts)
+                              (add-edited-shift (car shifts)
+                                                (shift-id (car shifts))
+                                                edited-shifts)
                               unchanged-shifts)]
     [else
       (shifts/snapshot/changed snapshot
                                (cdr shifts)
                                new-shifts
                                edited-shifts
-                               (cons (car shifts)
+                               (cons (shift-id (car shifts))
                                      unchanged-shifts))]))
 
 (define (shift-employees shift)
