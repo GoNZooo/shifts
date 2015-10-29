@@ -67,23 +67,14 @@
 (define (shift-in-snapshot shift snapshot)
   (hash-ref snapshot (shift-id shift) #f))
 
-(define (shift-deleted? shift)
-  (equal? (hash-ref shift
-                    'deleted)
-          "1"))
 
 (provide shifts/snapshot/changed)
 (define (shifts/snapshot/changed snapshot shifts
                                  [new-shifts '()]
-                                 [deleted-shifts '()]
-                                 [edited-shifts '()])
+                                 [edited-shifts '()]
+                                 [unchanged-shifts '()])
   (define (shifts/snapshot/new?)
     (not (hash-has-key? snapshot (shift-id (car shifts)))))
-
-  (define (shifts/snapshot/deleted?)
-    (and (not (shift-deleted? (shift-in-snapshot (car shifts)
-                                                 snapshot)))
-         (shift-deleted? (car shifts))))
 
   (define (shifts/snapshot/edited?)
     (not (equal? (hash-ref (shift-in-snapshot (car shifts)
@@ -92,7 +83,7 @@
                  (hash-ref (car shifts)
                            'edited))))
 
-  (define (add-changed-shift shift shift-list)
+  (define (add-shift shift shift-list)
     (cons (cons (shift-in-snapshot shift
                                    snapshot)
                 shift)
@@ -101,35 +92,40 @@
   (cond
     [(null? shifts)
      `#hash((new . ,new-shifts)
-            (deleted . ,deleted-shifts)
-            (edited . ,edited-shifts))]
+            (deleted .
+                     ,(map (lambda (sid)
+                             (hash-ref snapshot
+                                       sid))
+                           (filter (lambda (snapshot-id)
+                                     (not (findf (lambda (shift)
+                                                   (equal? (shift-id shift)
+                                                           snapshot-id))
+                                                 (append (map cdr edited-shifts)
+                                                         unchanged-shifts))))
+                                   (hash-keys snapshot)))))
+            (edited . ,edited-shifts)
+            (unchanged . ,unchanged-shifts))]
     [(shifts/snapshot/new?)
      (shifts/snapshot/changed snapshot
                               (cdr shifts)
-                              (add-changed-shift (car shifts)
+                              (add-shift (car shifts)
                                                  new-shifts)
-                              deleted-shifts  
-                              edited-shifts)]
-    [(shifts/snapshot/deleted?)
-     (shifts/snapshot/changed snapshot
-                              (cdr shifts)
-                              new-shifts
-                              (add-changed-shift (car shifts)
-                                                 deleted-shifts)
-                              edited-shifts)]
+                              edited-shifts
+                              unchanged-shifts)]
     [(shifts/snapshot/edited?)
      (shifts/snapshot/changed snapshot
                               (cdr shifts)
                               new-shifts
-                              deleted-shifts
-                              (add-changed-shift (car shifts)
-                                                 edited-shifts))]
+                              (add-shift (car shifts)
+                                                 edited-shifts)
+                              unchanged-shifts)]
     [else
       (shifts/snapshot/changed snapshot
                                (cdr shifts)
                                new-shifts
-                               deleted-shifts
-                               edited-shifts)]))
+                               edited-shifts
+                               (cons (car shifts)
+                                     unchanged-shifts))]))
 
 (define (shift-employees shift)
   (if (hash-has-key? shift 'employees)
@@ -199,7 +195,9 @@
 
 (module+ main
   (require racket/pretty)
-  (define snapshot (read-snapshot "cs_row"))
+  (define snapshot (read-snapshot "cs_row2"))
+  ; (define snapshot (shifts/snapshot/team "cs_row"))
+  ; (write-snapshot snapshot "cs_row2"))
   (pretty-print
     (shifts/snapshot/changed snapshot
                              (get/schedule/shifts/team "cs_row"))))
