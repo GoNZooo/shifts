@@ -22,6 +22,7 @@
                    (mode . "overview")
                    (detailed . 0))))
 
+(provide get/schedule/shifts/team)
 (define (get/schedule/shifts/team [team-name "cs_row"]
                                   #:start
                                   [start-date
@@ -49,6 +50,7 @@
     (values (hash-ref shift 'id)
             shift)))
 
+(provide write-snapshot)
 (define (write-snapshot snapshot [team-name "cs_row"])
   (call-with-output-file (format "cache/shifts/~a.cache"
                                  team-name)
@@ -56,11 +58,13 @@
                            (write snapshot out))
                          #:exists 'replace))
 
+(provide read-snapshot)
 (define (read-snapshot [team-name "cs_row"])
   (call-with-input-file (format "cache/shifts/~a.cache"
                                 team-name)
                         read))
 
+(provide modify-snapshot)
 (define (modify-snapshot snapshot diff)
   (define new-snapshot (make-hash))
 
@@ -81,9 +85,17 @@
               (hash-set! new-snapshot
                          (hash-ref new
                                    'id)
-                         'new))
+                         new))
             (hash-ref diff
                       'new))
+  
+  (for-each (lambda (unchanged)
+              (hash-set! new-snapshot
+                         unchanged
+                         (hash-ref snapshot
+                                   unchanged)))
+            (hash-ref diff
+                      'unchanged))
 
   new-snapshot)
 
@@ -220,9 +232,6 @@
 
 (module+ main
   (require racket/pretty)
-  (define snapshot (read-snapshot "cs_row2"))
-  ; (define snapshot (shifts/snapshot/team "cs_row"))
-  ; (write-snapshot snapshot "cs_row2"))
-  (pretty-print
-    (shifts/snapshot/diff snapshot
-                          (get/schedule/shifts/team "cs_row"))))
+  ;(define snapshot (read-snapshot "cs_row2"))
+   (define snapshot (shifts/snapshot/team "cs_row"))
+   (write-snapshot snapshot "cs_row"))

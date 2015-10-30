@@ -77,6 +77,11 @@
             (hash-ref e
                       'name))))
 
+(provide employee-id->name)
+(define (employee-id->name eid team-name)
+  (hash-ref (team->employee-ids team-name)
+            eid))
+
 (module+ main
   (require racket/pretty
            racket/string)
